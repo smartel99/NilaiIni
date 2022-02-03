@@ -32,7 +32,7 @@ add_compile_options(-ffunction-sections -fdata-sections -fno-common -fmessage-le
 add_compile_options(-fdiagnostics-color=always)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -include processes/NilaiTFOConfig.h -include NilaiTFO/defines/compilerDefines.h")
 # Disable -Wregister, which warns of the use of the register keyword in C++17 and later.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-register")
 
@@ -53,12 +53,14 @@ else ()
     add_compile_options(-O0 -g)
 endif ()
 
-include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include)
+include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include . vendor)
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F405xx)
 
-file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "gd32/*.s")
-#list(FILTER SOURCES EXCLUDE REGEX "Core/Startup/startup_stm32f405rgtx.s")
+file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "gd32/*.s" "Processes/*.*" "vendor/NilaiTFO/*.*")
+list(FILTER SOURCES EXCLUDE REGEX "vendor/NilaiTFO/test")
+list(FILTER SOURCES EXCLUDE REGEX "Core/Startup/startup_stm32f405rgtx.s")
+list(FILTER SOURCES EXCLUDE REGEX "Core/Src/main.c")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/gd32/GD32F407RK_FLASH.ld)
 
