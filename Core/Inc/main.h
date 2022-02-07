@@ -58,10 +58,34 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define AUDIO_BKND_ERROR_Pin GPIO_PIN_0
+#define AUDIO_BKND_ERROR_GPIO_Port GPIOC
+#define AUDIO_RESET_Pin GPIO_PIN_1
+#define AUDIO_RESET_GPIO_Port GPIOC
+#define AUDIO_PDN_Pin GPIO_PIN_2
+#define AUDIO_PDN_GPIO_Port GPIOC
+#define BUTTON_Pin GPIO_PIN_0
+#define BUTTON_GPIO_Port GPIOA
+#define I2S_LRCLK_Pin GPIO_PIN_4
+#define I2S_LRCLK_GPIO_Port GPIOA
+#define SD_SELECT_Pin GPIO_PIN_4
+#define SD_SELECT_GPIO_Port GPIOC
 #define LED_Pin GPIO_PIN_6
 #define LED_GPIO_Port GPIOC
+#define I2S_MCLK_Pin GPIO_PIN_7
+#define I2S_MCLK_GPIO_Port GPIOC
+#define I2S_SCLK_Pin GPIO_PIN_10
+#define I2S_SCLK_GPIO_Port GPIOC
+#define I2S_SDIN_Pin GPIO_PIN_12
+#define I2S_SDIN_GPIO_Port GPIOC
+#define AUDIO_SCL_Pin GPIO_PIN_6
+#define AUDIO_SCL_GPIO_Port GPIOB
+#define AUDIO_SDA_Pin GPIO_PIN_7
+#define AUDIO_SDA_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+#define SD_SPI_HANDLE   hspi1
+#define SD_CS_GPIO_Port SD_SELECT_GPIO_Port
+#define SD_CS_Pin       SD_SELECT_Pin
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

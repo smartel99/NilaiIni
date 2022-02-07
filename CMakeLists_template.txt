@@ -52,7 +52,7 @@ else ()
     add_compile_options(-O0 -g)
 endif ()
 
-include_directories(${includes} . vendor)
+include_directories(${includes} Middlewares/Third_Party/FatFs/src . vendor)
 
 add_definitions(${defines})
 

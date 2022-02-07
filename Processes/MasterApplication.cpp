@@ -16,6 +16,9 @@
 #include "Core/Inc/dma.h"
 #include "Core/Inc/main.h"
 #include "Core/Inc/usart.h"
+#include "Core/Inc/spi.h"
+#include "Core/Inc/i2c.h"
+#include "Core/Inc/i2s.h"
 
 #include "NilaiTFO/defines/macros.hpp"
 #include "NilaiTFO/defines/pin.h"
@@ -23,8 +26,7 @@
 #include "NilaiTFO/drivers/uartModule.hpp"
 #include "NilaiTFO/interfaces/heartbeatModule.h"
 #include "NilaiTFO/services/logger.hpp"
-#include "NilaiTFO/services/SystemModule.h"
-#include "NilaiTFO/services/umoModule.h"
+#include "NilaiTFO/services/filesystem.h"
 
 
 
@@ -52,6 +54,12 @@ bool MasterApplication::DoPost()
 
     bool   allModulesPassedPost = true;
     size_t start                = HAL_GetTick();
+
+    if(!cep::Filesystem::IsMounted())
+    {
+        m_logger->Log("POST Error: File system is not mounted!\n\r");
+        allModulesPassedPost = false;
+    }
 
     for (auto module = s_instance->m_modules.rbegin(); module != s_instance->m_modules.rend();
          module++)
@@ -104,6 +112,9 @@ void MasterApplication::InitializeHal()
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_USART2_UART_Init();
+    MX_SPI1_Init();
+    MX_I2C1_Init();
+    MX_I2S3_Init();
 }
 
 
@@ -116,10 +127,13 @@ void MasterApplication::InitializeModules()
     m_logger = new Logger(uart2);
     Logger::Get()->Log("\n\n\r");
     Logger::Get()->Log(
-      "================================================================================");
-    Logger::Get()->Log("Application started.");
+      "================================================================================\n\r");
+    Logger::Get()->Log("Application started.\n\r");
 
     AddModule(new HeartbeatModule({LED_GPIO_Port, LED_Pin}, "heartbeat"));
+
+    cep::Filesystem::Init();
+    cep::Filesystem::Mount("", true);   // Mount the SD card, if one is found.
 
     // --- Processes ---
 

@@ -53,11 +53,11 @@ else ()
     add_compile_options(-O0 -g)
 endif ()
 
-include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include . vendor)
+include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include FATFS/Target FATFS/App Middlewares/Third_Party/FatFs/src Middlewares/Third_Party/FatFs/src . vendor)
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F405xx)
 
-file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "gd32/*.s" "Processes/*.*" "vendor/NilaiTFO/*.*")
+file(GLOB_RECURSE SOURCES "Core/*.*" "FATFS/*.*" "Middlewares/*.*" "Drivers/*.*" "gd32/*.s" "Processes/*.*" "vendor/NilaiTFO/*.*")
 list(FILTER SOURCES EXCLUDE REGEX "vendor/NilaiTFO/test")
 list(FILTER SOURCES EXCLUDE REGEX "Core/Startup/startup_stm32f405rgtx.s")
 list(FILTER SOURCES EXCLUDE REGEX "Core/Src/main.c")
