@@ -71,7 +71,7 @@
 // Drivers
 //#define NILAI_USE_ADC
 //#define NILAI_USE_CAN
-//#define NILAI_USE_I2C
+#define NILAI_USE_I2C
 #define NILAI_USE_I2S
 #define NILAI_USE_SPI
 #define NILAI_USE_UART

@@ -60,12 +60,13 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define AUDIO_BKND_ERROR_Pin GPIO_PIN_0
 #define AUDIO_BKND_ERROR_GPIO_Port GPIOC
+#define AUDIO_BKND_ERROR_EXTI_IRQn EXTI0_IRQn
 #define AUDIO_RESET_Pin GPIO_PIN_1
 #define AUDIO_RESET_GPIO_Port GPIOC
-#define AUDIO_PDN_Pin GPIO_PIN_2
-#define AUDIO_PDN_GPIO_Port GPIOC
 #define BUTTON_Pin GPIO_PIN_0
 #define BUTTON_GPIO_Port GPIOA
+#define AUDIO_PVDDEn_Pin GPIO_PIN_1
+#define AUDIO_PVDDEn_GPIO_Port GPIOA
 #define I2S_LRCLK_Pin GPIO_PIN_4
 #define I2S_LRCLK_GPIO_Port GPIOA
 #define SD_SELECT_Pin GPIO_PIN_4
@@ -78,6 +79,8 @@ void Error_Handler(void);
 #define I2S_SCLK_GPIO_Port GPIOC
 #define I2S_SDIN_Pin GPIO_PIN_12
 #define I2S_SDIN_GPIO_Port GPIOC
+#define AUDIO_PDN_Pin GPIO_PIN_5
+#define AUDIO_PDN_GPIO_Port GPIOB
 #define AUDIO_SCL_Pin GPIO_PIN_6
 #define AUDIO_SCL_GPIO_Port GPIOB
 #define AUDIO_SDA_Pin GPIO_PIN_7
