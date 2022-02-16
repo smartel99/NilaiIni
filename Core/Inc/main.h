@@ -71,6 +71,8 @@ void Error_Handler(void);
 #define I2S_LRCLK_GPIO_Port GPIOA
 #define SD_SELECT_Pin GPIO_PIN_4
 #define SD_SELECT_GPIO_Port GPIOC
+#define LED2_Pin GPIO_PIN_14
+#define LED2_GPIO_Port GPIOB
 #define LED_Pin GPIO_PIN_6
 #define LED_GPIO_Port GPIOC
 #define I2S_MCLK_Pin GPIO_PIN_7

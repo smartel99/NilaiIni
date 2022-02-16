@@ -31,6 +31,9 @@
 #include "NilaiTFO/services/filesystem.h"
 #include "NilaiTFO/services/logger.hpp"
 
+#include "Processes/DebugUI.h"
+#include "WavPlayer.h"
+
 
 
 MasterApplication* MasterApplication::s_instance = nullptr;
@@ -136,33 +139,35 @@ void MasterApplication::InitializeModules()
     // --- Drivers ---
 
     I2cModule* i2c = new I2cModule(&hi2c1, "i2c1");
-    I2sModule* i2s = new I2sModule(&hi2s3, "i2s3");
 
     // --- Interfaces ---
     cep::Filesystem::Init();
-    cep::Filesystem::Mount("", false);    // Mount the SD card, if one is found.
+    cep::Filesystem::Mount("", true);    // Mount the SD card, if one is found.
 
     cep::Tas5707::SoftwareConfig tasSwCfg {};
-    tasSwCfg.Ch2Source = cep::Tas5707::Channel2InputSources::SDIN_L;
+    tasSwCfg.SerialMode = cep::Tas5707::SerialDataMode::I2S16Bits;
+    tasSwCfg.UseEqs = cep::Tas5707::EqModes::Disabled;
     cep::Tas5707::HardwareConfig tasHwCfg {};
     tasHwCfg.I2cHandle = i2c;
-    tasHwCfg.I2sHandle = i2s;
     tasHwCfg.Reset     = {AUDIO_RESET_GPIO_Port, AUDIO_RESET_Pin};
     tasHwCfg.PwrDwn    = {AUDIO_PDN_GPIO_Port, AUDIO_PDN_Pin};
     tasHwCfg.Fault     = {AUDIO_BKND_ERROR_GPIO_Port, AUDIO_BKND_ERROR_Pin};
     tasHwCfg.PVddEn    = {AUDIO_PVDDEn_GPIO_Port, AUDIO_PVDDEn_Pin};
 
-    AddModule(new Tas5707Module(tasHwCfg, tasSwCfg, "TAS5707"));
 
     // --- Processes ---
-    AddModule(new HeartbeatModule({LED_GPIO_Port, LED_Pin}, "heartbeat"));
+    //    AddModule(new HeartbeatModule({LED_GPIO_Port, LED_Pin}, "heartbeat"));
+    AddModule(new DebugUI(uart2));
+    auto* tas = new Tas5707Module(tasHwCfg, tasSwCfg, &hi2s3, "TAS5707");
+    AddModule(tas);
+    AddModule(new WavPlayer(tas));
 
     LOG_INFO("Application Initialized!");
 }
 
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if(GPIO_Pin == AUDIO_BKND_ERROR_Pin)
+    if (GPIO_Pin == AUDIO_BKND_ERROR_Pin)
     {
         LOG_CRITICAL("[TAS5707]: Backend error detected!");
     }

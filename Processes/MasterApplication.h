@@ -24,6 +24,9 @@
 #    include "NilaiTFO/services/logger.hpp"
 #    include "NilaiTFO/services/umoModule.h"
 
+#include "Processes/WavPlayer.h"
+#include "NilaiTFO/interfaces/TAS5707/Tas5707Module.h"
+
 #    include <map>
 
 /*****************************************************************************/
@@ -38,7 +41,11 @@
 
 // SERVICES
 
+// INTERFACES
+#define TAS_MODULE (static_cast<Tas5707Module*>(MasterApplication::GetModule("TAS5707")))
+
 // PROCESSES
+#define WAV_PLAYER (static_cast<WavPlayer*>(MasterApplication::GetModule("WavPlayer")))
 
 /*****************************************************************************/
 /* Exported types */
