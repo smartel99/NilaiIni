@@ -24,17 +24,16 @@
 #include "NilaiTFO/defines/pin.h"
 
 #include "NilaiTFO/drivers/i2cModule.hpp"
-#include "NilaiTFO/drivers/i2sModule.h"
 #include "NilaiTFO/drivers/uartModule.hpp"
 #include "NilaiTFO/interfaces/heartbeatModule.h"
-#include "NilaiTFO/interfaces/TAS5707/Tas5707Module.h"
 #include "NilaiTFO/services/filesystem.h"
 #include "NilaiTFO/services/logger.hpp"
 
-#include "Processes/DebugUI.h"
-#include "WavPlayer.h"
+#include "NilaiTFO/services/IniParser.h"
 
 
+#define HAS_SECTION(section)         (ini.HasSection(section) ? "true" : "false")
+#define HAS_VALUE_STR(section, name) section, name, ini.HasValue(section, name) ? "true" : "false"
 
 MasterApplication* MasterApplication::s_instance = nullptr;
 
@@ -48,6 +47,8 @@ void MasterApplication::Init()
 {
     InitializeHal();
     InitializeModules();
+
+    CheckParser();
 }
 
 bool MasterApplication::DoPost()
@@ -138,31 +139,65 @@ void MasterApplication::InitializeModules()
 
     // --- Drivers ---
 
-    I2cModule* i2c = new I2cModule(&hi2c1, "i2c1");
-
     // --- Interfaces ---
     cep::Filesystem::Init();
     cep::Filesystem::Mount("", true);    // Mount the SD card, if one is found.
 
-    cep::Tas5707::SoftwareConfig tasSwCfg {};
-    tasSwCfg.SerialMode = cep::Tas5707::SerialDataMode::I2S16Bits;
-    tasSwCfg.UseEqs = cep::Tas5707::EqModes::Disabled;
-    cep::Tas5707::HardwareConfig tasHwCfg {};
-    tasHwCfg.I2cHandle = i2c;
-    tasHwCfg.Reset     = {AUDIO_RESET_GPIO_Port, AUDIO_RESET_Pin};
-    tasHwCfg.PwrDwn    = {AUDIO_PDN_GPIO_Port, AUDIO_PDN_Pin};
-    tasHwCfg.Fault     = {AUDIO_BKND_ERROR_GPIO_Port, AUDIO_BKND_ERROR_Pin};
-    tasHwCfg.PVddEn    = {AUDIO_PVDDEn_GPIO_Port, AUDIO_PVDDEn_Pin};
-
-
     // --- Processes ---
-    //    AddModule(new HeartbeatModule({LED_GPIO_Port, LED_Pin}, "heartbeat"));
-    AddModule(new DebugUI(uart2));
-    auto* tas = new Tas5707Module(tasHwCfg, tasSwCfg, &hi2s3, "TAS5707");
-    AddModule(tas);
-    AddModule(new WavPlayer(tas));
+    AddModule(new HeartbeatModule({LED_GPIO_Port, LED_Pin}, "heartbeat"));
+
 
     LOG_INFO("Application Initialized!");
+}
+void MasterApplication::CheckParser()
+{
+    cep::IniParser ini("cfg.ini");
+
+    if (ini.GetError() != 0)
+    {
+        LOG_ERROR("ini failed to be parsed: %i", ini.GetError());
+        return;
+    }
+
+    LOG_DEBUG("HasSection:");
+    LOG_DEBUG("Has section 1: %s", HAS_SECTION("section 1"));
+    LOG_DEBUG("Has section 2: %s", HAS_SECTION("section 2"));
+    LOG_DEBUG("Has section 3: %s", HAS_SECTION("section 3"));
+    LOG_DEBUG("Has section 4: %s", HAS_SECTION("section 4"));
+
+    LOG_DEBUG("\n\rHasValue:");
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 1", "s1"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 1", "s2"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 2", "i1"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 2", "i2"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 2", "i3"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 3", "f1"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 3", "f2"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 4", "b1"));
+    LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 4", "b2"));
+
+    LOG_DEBUG("\n\rGetString:");
+    LOG_DEBUG("s1: %s", ini.GetString("section 1", "s1").c_str());
+    LOG_DEBUG("s2: %s", ini.GetString("section 1", "s2").c_str());
+
+    LOG_DEBUG("\n\rGetInteger:");
+    LOG_DEBUG("i1: %d", ini.GetInteger("section 2", "i1"));
+    LOG_DEBUG("i2: %d", ini.GetInteger("section 2", "i2"));
+    LOG_DEBUG("i3: %d", ini.GetInteger("section 2", "i3"));
+
+    LOG_DEBUG("\n\rGetDecimal:");
+    LOG_DEBUG("f1: %0.4f", ini.GetDecimal("section 3", "f1"));
+    LOG_DEBUG("f2: %0.4f", ini.GetDecimal("section 3", "f2"));
+
+    LOG_DEBUG("\n\rGetBoolean:");
+    LOG_DEBUG("b1: %s", ini.GetBoolean("section 4", "b1") ? "true" : "false");
+    LOG_DEBUG("b2: %s", ini.GetBoolean("section 4", "b2") ? "true" : "false");
+
+    LOG_DEBUG("\n\rIterators:");
+    for (auto& [k, v] : ini)
+    {
+        LOG_DEBUG("%s = %s", k.c_str(), v.c_str());
+    }
 }
 
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)

@@ -1,14 +1,14 @@
 /**
-* @addtogroup NilaiTFOConfig.h
-* @{
-*******************************************************************************
-* @file    NilaiTFOConfig.h
-* @author  Samuel Martel
-* @brief
-* Created on: 2020/10/06
-* Updated on: 2021/04/09
-*******************************************************************************
-*/
+ * @addtogroup NilaiTFOConfig.h
+ * @{
+ *******************************************************************************
+ * @file    NilaiTFOConfig.h
+ * @author  Samuel Martel
+ * @brief
+ * Created on: 2020/10/06
+ * Updated on: 2021/04/09
+ *******************************************************************************
+ */
 
 #ifndef GUARD_NILAITFOCONFIG_H
 #define GUARD_NILAITFOCONFIG_H
@@ -24,30 +24,30 @@
 /******************************************************************************/
 
 /**
-* Warn if a module is included but the STM32 drivers are missing.
-* Set to 1 to enable, 0 to disable
-*/
+ * Warn if a module is included but the STM32 drivers are missing.
+ * Set to 1 to enable, 0 to disable
+ */
 #define WARN_MISSING_STM_DRIVERS 1
 
 /**
-* Select the STM32 you are using.
-* This is extremely important for the activated modules that depends on HAL functions.
-* Obviously, don't try enabling more than one at the same time, that won't work.
-*/
+ * Select the STM32 you are using.
+ * This is extremely important for the activated modules that depends on HAL functions.
+ * Obviously, don't try enabling more than one at the same time, that won't work.
+ */
 #define NILAI_USES_STM32F4xx
 //#define NILAI_USES_STM32L4xx
 
 /**
-* Select if the logger should use the system time or the RTC time.
-* To use the RTC, the RTC module must be enabled.
-* Uncomment to use the RTC, comment to use the system clock.
-*/
+ * Select if the logger should use the system time or the RTC time.
+ * To use the RTC, the RTC module must be enabled.
+ * Uncomment to use the RTC, comment to use the system clock.
+ */
 //#define NILAI_LOGGER_USE_RTC
 
 /**
-* Toggle each level of logging.
-* To enable a level of logging, uncomment the definition, otherwise comment it.
-*/
+ * Toggle each level of logging.
+ * To enable a level of logging, uncomment the definition, otherwise comment it.
+ */
 #define NILAI_LOG_ENABLE_DEBUG
 #define NILAI_LOG_ENABLE_INFO
 #define NILAI_LOG_ENABLE_WARNING
@@ -55,10 +55,10 @@
 #define NILAI_LOG_ENABLE_CRITICAL
 
 /**
-* Defines the hardware layer used by Umo.
-* Selects if the hardware layer should be UART or CAN.
-* Can only have one at a time!
-*/
+ * Defines the hardware layer used by Umo.
+ * Selects if the hardware layer should be UART or CAN.
+ * Can only have one at a time!
+ */
 //#define NILAI_UMO_USE_CAN
 #define NILAI_UMO_USE_UART
 
@@ -66,8 +66,8 @@
 /* [SECTION]: Module Activation                                               */
 /******************************************************************************/
 /**
-* Uncomment a define to use that module, or comment it to disable it
-*/
+ * Uncomment a define to use that module, or comment it to disable it
+ */
 // Drivers
 //#define NILAI_USE_ADC
 //#define NILAI_USE_CAN
@@ -99,9 +99,10 @@
 #define NILAI_USE_LOGGER
 //#define NILAI_USE_FILE_LOGGER
 #define NILAI_USE_FILESYSTEM
+#define NILAI_USE_INI_PARSER
 
 /**
-* @}
-*/
+ * @}
+ */
 /* END OF FILE */
 #endif /* GUARD_NILAITFOCONFIG_H */

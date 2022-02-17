@@ -61,6 +61,11 @@ file(GLOB_RECURSE SOURCES "Core/*.*" "FATFS/*.*" "Middlewares/*.*" "Drivers/*.*"
 list(FILTER SOURCES EXCLUDE REGEX "vendor/NilaiTFO/test")
 list(FILTER SOURCES EXCLUDE REGEX "Core/Startup/startup_stm32f405rgtx.s")
 list(FILTER SOURCES EXCLUDE REGEX "Core/Src/main.c")
+# Just include ini.h and ini.c from nilai/vendor/inih
+list(FILTER SOURCES EXCLUDE REGEX "vendor/NilaiTFO/vendor/inih")
+set(SOURCES "${SOURCES};${CMAKE_SOURCE_DIR}/vendor/NilaiTFO/vendor/inih/ini.c")
+
+message(STATUS "Sources: ${SOURCES}")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/gd32/GD32F407RK_FLASH.ld)
 
