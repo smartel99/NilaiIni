@@ -33,6 +33,7 @@ add_compile_options(-fdiagnostics-color=always)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -include processes/NilaiTFOConfig.h -include NilaiTFO/defines/compilerDefines.h")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts")
 # Disable -Wregister, which warns of the use of the register keyword in C++17 and later.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-register")
 
@@ -61,7 +62,7 @@ file(GLOB_RECURSE SOURCES "Core/*.*" "FATFS/*.*" "Middlewares/*.*" "Drivers/*.*"
 list(FILTER SOURCES EXCLUDE REGEX "vendor/NilaiTFO/test")
 list(FILTER SOURCES EXCLUDE REGEX "Core/Startup/startup_stm32f405rgtx.s")
 list(FILTER SOURCES EXCLUDE REGEX "Core/Src/main.c")
-# Just include ini.h and ini.c from nilai/vendor/inih
+
 list(FILTER SOURCES EXCLUDE REGEX "vendor/NilaiTFO/vendor/inih")
 set(SOURCES "${SOURCES};${CMAKE_SOURCE_DIR}/vendor/NilaiTFO/vendor/inih/ini.c")
 

@@ -177,27 +177,35 @@ void MasterApplication::CheckParser()
     LOG_DEBUG("Has %s - %s: %s", HAS_VALUE_STR("section 4", "b2"));
 
     LOG_DEBUG("\n\rGetString:");
-    LOG_DEBUG("s1: %s", ini.GetString("section 1", "s1").c_str());
-    LOG_DEBUG("s2: %s", ini.GetString("section 1", "s2").c_str());
+    LOG_DEBUG("s1: %s", ini.Get<std::string>("section 1", "s1").c_str());
+    LOG_DEBUG("s2: %s", ini.Get<std::string>("section 1", "s2").c_str());
 
     LOG_DEBUG("\n\rGetInteger:");
-    LOG_DEBUG("i1: %d", ini.GetInteger("section 2", "i1"));
-    LOG_DEBUG("i2: %d", ini.GetInteger("section 2", "i2"));
-    LOG_DEBUG("i3: %d", ini.GetInteger("section 2", "i3"));
+    LOG_DEBUG("i1: %d", ini.Get<int>("section 2", "i1"));
+    LOG_DEBUG("i2: %d", ini.Get<int>("section 2", "i2"));
+    LOG_DEBUG("i3: %d", ini.Get<int>("section 2", "i3"));
 
     LOG_DEBUG("\n\rGetDecimal:");
-    LOG_DEBUG("f1: %0.4f", ini.GetDecimal("section 3", "f1"));
-    LOG_DEBUG("f2: %0.4f", ini.GetDecimal("section 3", "f2"));
+    LOG_DEBUG("f1: %0.4f", ini.Get<float>("section 3", "f1"));
+    LOG_DEBUG("f2: %0.4f", ini.Get<float>("section 3", "f2"));
 
     LOG_DEBUG("\n\rGetBoolean:");
-    LOG_DEBUG("b1: %s", ini.GetBoolean("section 4", "b1") ? "true" : "false");
-    LOG_DEBUG("b2: %s", ini.GetBoolean("section 4", "b2") ? "true" : "false");
+    LOG_DEBUG("b1: %s", ini.Get<bool>("section 4", "b1") ? "true" : "false");
+    LOG_DEBUG("b2: %s", ini.Get<bool>("section 4", "b2") ? "true" : "false");
 
     LOG_DEBUG("\n\rIterators:");
     for (auto& [k, v] : ini)
     {
         LOG_DEBUG("%s = %s", k.c_str(), v.c_str());
     }
+
+    ini.SetStr("section 5", "str", "asdf");
+    ini.SetInt("section 5", "int", 1);
+    ini.SetInt("section 5", "uint", 1234);
+    ini.SetDouble("section 5", "double", 123.456f);
+    ini.SetBool("section 5", "bool", false);
+
+    ini.Save();
 }
 
 extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
